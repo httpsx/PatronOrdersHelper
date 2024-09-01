@@ -16,15 +16,19 @@ end
 
 ProfessionsCrafterTableCellCustomHideMixin = CreateFromMixins(TableBuilderCellMixin)
 
+local function setAlphaRow(order, value)
+    order:GetParent():GetParent():SetAlpha(value)
+end
+
 local function updateOrderAlpha()
     local dataProvider = ProfessionsFrame.OrdersPage.BrowseFrame.OrderList.ScrollBox:GetDataProvider()
     local collection = dataProvider:GetCollection()
     for i = 1, #collection do
         local uniqID = (generateUniqueID(collection[i].option.expirationTime, collection[i].option.itemID, collection[i].option.orderID))
         if (POHSaved.orders[uniqID]) then
-            _G["PublicOrdersCustomHideColumn" .. uniqID]:GetParent():GetParent():SetAlpha(0.2)
+            setAlphaRow(_G["PublicOrdersCustomHideColumn" .. uniqID], 0.2)
         else
-            _G["PublicOrdersCustomHideColumn" .. uniqID]:GetParent():GetParent():SetAlpha(1.0)
+            setAlphaRow(_G["PublicOrdersCustomHideColumn" .. uniqID], 1.0)
         end
     end
 end
@@ -54,7 +58,7 @@ local function updateOrderList()
 end
 
 
-
+local sessionOrders = {}
 EventUtil.ContinueOnAddOnLoaded("Blizzard_Professions", function()
     function ProfessionsCrafterTableCellCustomHideMixin:Populate(rowData, dataIndex)
         local order = rowData.option
@@ -72,6 +76,7 @@ EventUtil.ContinueOnAddOnLoaded("Blizzard_Professions", function()
                 POHSaved.orders[uniqID] = checkBox:GetChecked()
                 updateOrderList()
             end)
+            sessionOrders[uniqID] = true
 
             local isDebug = false
             if isDebug then
@@ -86,10 +91,18 @@ EventUtil.ContinueOnAddOnLoaded("Blizzard_Professions", function()
                 end)
             end
         else
+            _G["PublicOrdersCustomHideColumn" .. uniqID]:Show()
             _G["PublicOrdersCustomHideColumn" .. uniqID]:SetParent(e)
             _G["PublicOrdersCustomHideColumn" .. uniqID]:SetPoint("CENTER", e, "CENTER", -10, 0)
         end
     end
+
+    ProfessionsFrame.OrdersPage:HookScript("OnHide", function(event)
+        for k, v in pairs(sessionOrders) do
+            _G["PublicOrdersCustomHideColumn" .. k]:Hide()
+            setAlphaRow(_G["PublicOrdersCustomHideColumn" .. k], 1.0)
+        end
+    end)
 
     hooksecurefunc(ProfessionsFrame.OrdersPage, "SetupTable", function(self)
         local PTC = ProfessionsTableConstants;
