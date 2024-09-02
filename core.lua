@@ -5,7 +5,6 @@ end
 
 local sessionOrders = {}
 
-
 local function generateUniqueID(order)
     local data = tostring(order.expirationTime) .. tostring(order.itemID) .. tostring(order.orderID)
     --local data = tostring(order.orderID)
