@@ -120,6 +120,10 @@ EventUtil.ContinueOnAddOnLoaded("Blizzard_Professions", function()
         resetOrderList()
     end)
 
+    hooksecurefunc(ProfessionsFrame.OrdersPage, "SendOrderRequest", function(self)
+        resetOrderList()
+    end)
+
     hooksecurefunc(ProfessionsFrame.OrdersPage, "SetupTable", function(self)
         if self.orderType == 3 then
             local PTC = ProfessionsTableConstants;
