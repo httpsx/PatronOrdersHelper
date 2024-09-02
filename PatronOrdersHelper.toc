@@ -1,9 +1,10 @@
 ## Interface: 110002
 ## Title: Patron Orders Helper
 ## Author: Httpsx
-## Version: 1.0
+## Version: 1.1
 ## Notes: Tool for Profession Patron Work Orders 
 ## DefaultState: Enabled
 ## SavedVariables: POHSaved
+
 PatronOrdersHelper.xml
 core.lua
