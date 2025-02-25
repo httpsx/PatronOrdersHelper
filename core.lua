@@ -22,12 +22,21 @@ local function setAlphaRow(order, value)
     order:GetParent():GetParent():SetAlpha(value)
 end
 
+local function isRecipeLearned(order)
+    local recipeId = order.spellID
+    local recipe = C_TradeSkillUI.GetRecipeInfo(recipeId)
+    local isLearned = recipe and recipe.learned
+    return isLearned
+end
+
 local function updateOrderAlpha()
     local dataProvider = ProfessionsFrame.OrdersPage.BrowseFrame.OrderList.ScrollBox:GetDataProvider()
     local collection = dataProvider:GetCollection()
     for i = 1, #collection do
-        local uniqID = (generateUniqueID(collection[i].option))
-        if (POHSaved.orders[uniqID]) then
+        local order = collection[i].option
+        local uniqID = generateUniqueID(order)
+        local doFade = POHSaved.orders[uniqID] or not isRecipeLearned(order)
+        if (doFade) then
             setAlphaRow(_G["PublicOrdersCustomHideColumn" .. uniqID], 0.2)
         else
             setAlphaRow(_G["PublicOrdersCustomHideColumn" .. uniqID], 1.0)
