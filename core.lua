@@ -65,7 +65,6 @@ local function updateOrderList()
         end
     end
 
-    --swapOrders()
     updateOrderAlpha()
 end
 
