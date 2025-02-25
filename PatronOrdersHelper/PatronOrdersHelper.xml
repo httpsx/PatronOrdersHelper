@@ -1,0 +1,3 @@
+<Ui>
+    <Frame name="ProfessionsCrafterTableCellCustomHideTemplate" mixin="ProfessionsCrafterTableCellCustomHideMixin" inherits="ProfessionsTableCellTextTemplate" virtual="true"/>
+</Ui>
